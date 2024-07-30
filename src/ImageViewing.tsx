@@ -40,6 +40,8 @@ type Props = {
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
   delayLongPress?: number;
+  shouldHeaderTransform?: boolean;
+  shouldFooterComponent?: boolean;
   HeaderComponent?: ComponentType<{ imageIndex: number }>;
   FooterComponent?: ComponentType<{ imageIndex: number }>;
 };
@@ -64,6 +66,8 @@ function ImageViewing({
   swipeToCloseEnabled,
   doubleTapToZoomEnabled,
   delayLongPress = DEFAULT_DELAY_LONG_PRESS,
+  shouldHeaderTransform = true,
+  shouldFooterComponent = true,
   HeaderComponent,
   FooterComponent,
 }: Props) {
@@ -104,7 +108,12 @@ function ImageViewing({
     >
       <StatusBarManager presentationStyle={presentationStyle} />
       <View style={[styles.container, { opacity, backgroundColor }]}>
-        <Animated.View style={[styles.header, { transform: headerTransform }]}>
+        <Animated.View
+          style={[
+            styles.header,
+            shouldHeaderTransform && { transform: headerTransform },
+          ]}
+        >
           {typeof HeaderComponent !== "undefined" ? (
             React.createElement(HeaderComponent, {
               imageIndex: currentImageIndex,
@@ -154,7 +163,10 @@ function ImageViewing({
         />
         {typeof FooterComponent !== "undefined" && (
           <Animated.View
-            style={[styles.footer, { transform: footerTransform }]}
+            style={[
+              styles.footer,
+              shouldFooterComponent && { transform: footerTransform },
+            ]}
           >
             {React.createElement(FooterComponent, {
               imageIndex: currentImageIndex,
